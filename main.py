@@ -1,4 +1,4 @@
-from mcp.server.fastmcp import FastMCP, Context
+from mcp.server.fastmcp import FastMCP, Context, Image
 import math
 
 mcp = FastMCP()
@@ -82,28 +82,6 @@ def prime(n: int) -> bool:
     return True
 
 # MATH MODULE ITSELF
-# Constants (No Parameters)
-constants = ["e", "inf", "nan", "pi", "tau"]
-    
-# Single-Parameter Functions (f(x))
-single_param = [
-    "acos", "acosh", "asin", "asinh", "atan", "atanh", "cbrt", "ceil", "cos",
-    "cosh", "degrees", "erf", "erfc", "exp", "exp2", "expm1", "fabs", "factorial",
-    "floor", "frexp", "gamma", "isfinite", "isinf", "isnan", "isqrt", "lgamma",
-    "log", "log10", "log1p", "log2", "modf", "radians", "sin", "sinh", "sqrt",
-    "tan", "tanh", "trunc", "ulp"
-]
-
-# Two-Parameter Functions (f(x, y))
-two_param = [
-    "atan2", "copysign", "fmod", "gcd", "hypot", "isclose", "lcm",
-    "ldexp", "nextafter", "pow", "remainder"
-]
-
-# Multiple-Parameter Functions (f(*args))
-multi_param = [
-    "comb", "dist", "fsum", "prod", "perm", "sumprod"
-]
 
 # Constants (No Parameters)
 @mcp.tool()
@@ -347,7 +325,7 @@ def gcd(x: int, y: int) -> int:
 
 @mcp.tool()
 def hypot(x: float, y: float) -> float:
-    """Compute the Euclidean norm sqrt(x² + y²)."""
+    """Compute the Euclidean norm sqrt(x² + y²) or the distance from the origin"""
     return math.hypot(x, y)
 
 @mcp.tool()
@@ -380,6 +358,45 @@ def remainder(x: float, y: float) -> float:
     """Compute the IEEE remainder of x divided by y."""
     return math.remainder(x, y)
 
+@mcp.tool()
+def comb(n: int, k: int) -> int:
+    """Return the number of ways to choose k items from n without repetition and without order."""
+    return math.comb(n, k)
+
+@mcp.tool()
+def dist(p: list[float], q: list[float]) -> float:
+    """Return the Euclidean distance between points p and q in an N-dimensional space."""
+    return math.dist(p, q)
+
+@mcp.tool()
+def fsum(iterable: list[float]) -> float:
+    """Return an accurate floating-point sum of values in the iterable, reducing precision errors."""
+    return math.fsum(iterable)
+
+@mcp.tool()
+def prod(iterable: list[float]) -> float:
+    """Return the product of values in the iterable."""
+    return math.prod(iterable)
+
+@mcp.tool()
+def perm(n: int, k: int) -> int:
+    """Return the number of ways to arrange k items from n in order (permutations)."""
+    return math.perm(n, k)
+
+@mcp.tool()
+def sumprod(iterable1: list[float], iterable2: list[float]) -> float:
+    """Return the sum of products of corresponding elements in two iterables."""
+    return math.fsum(x * y for x, y in zip(iterable1, iterable2))
+
+@mcp.tool()
+def sumsq(iterable: list[float]) -> float:
+    """Return the sum of squares of values in the iterable."""
+    return math.fsum(x ** 2 for x in iterable)
+
+@mcp.tool()
+def sumsq_diff(iterable1: list[float], iterable2: list[float]) -> float:
+    """Return the sum of squares of differences between corresponding elements in two iterables."""
+    return math.fsum((x - y) ** 2 for x, y in zip(iterable1, iterable2))
 
 if __name__ == "__main__":
     mcp.run()
